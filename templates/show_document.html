@@ -1,0 +1,372 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content %}
+     
+
+
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+
+            {% if filterby == 'agency' or  filterby == 'country' %}
+
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <h4 class="font-weight-bold mb-0">agency details</h4>
+                        </div>
+                       
+                      </div>
+                  <div class="info-grid">
+                    {% if filterby == 'agency' %}
+                    <div class="info-item">
+                        <p class="label">agency _name</p>
+                        <p class="value">{{value}}</p>
+                    </div>
+                    <div class="info-item">
+                      <p class="label">mobile number</p>
+                      <p class="value">{{ncc}}</p>
+                  </div>
+                  
+                  <div class="info-item">
+                      <p class="label">address</p>
+                      <p class="value"> {{doc.university}}</p>
+                  </div>
+                
+                  <div class="info-item">
+                    <p class="label">total doc</p>
+                    <p class="value"> {{totaldoc_count}}</p>
+                </div>
+                <div class="info-item">
+                  <p class="label">open doc</p>
+                  <p class="value"> {{opendoc_count}}</p>
+              </div>
+                  <div class="info-item">
+                    <p class="label">processing doc</p>
+                    <p class="value"> {{processin_count}}</p>
+                </div>
+                  <div class="info-item">
+                      <p class="label">comment</p>
+                      <p class="value">{{doc.comment}}</p>
+                  </div> 
+                    {% endif %}
+                    {% if filterby == 'country' %}
+                    <div class="info-item">
+                        <p class="label" >country _name</p>
+                        <p class="value" class="text-danger">{{value}}</p>
+                    </div>
+                  <div class="info-item">
+                    <p class="label">total doc</p>
+                    <p class="value"> {{totaldoc_count}}</p>
+                </div>
+                <div class="info-item">
+                  <p class="label">open doc</p>
+                  <p class="value"> {{opendoc_count}}</p>
+              </div>
+                  <div class="info-item">
+                    <p class="label">processing doc</p>
+                    <p class="value"> {{processin_count}}</p>
+                </div>
+                  <div class="info-item">
+                      <p class="label">comment</p>
+                      <p class="value">{{doc.comment}}</p>
+                  </div> 
+                    {% endif %}
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+{% endif %}
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div>
+                  <button type="button" class="btn ">
+                    <i class="ti-arrow-left"></i>
+                   </button>
+                </div>
+                <div class="card-body"> 
+                  <h4 class="card-title">Open Documents</h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                           SL NO.
+                          </th>
+                          <th>
+                            Agency name
+                          </th>
+                          <th>
+                            Student name
+                          </th>
+                          <th>
+                            Mobile number
+                          </th>
+                          <th>
+                            University
+                          </th>
+                          <th >
+                            submitting for
+                          </th>
+                          <th>
+                            Tracking no.
+                          </th>
+                          <th>
+                            Submitted Date
+                          </th>
+                          
+                          
+                           <th>
+                            Status
+                           </th>
+                           
+ 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for doc in opendoc %}
+                        {% if doc is not none %}
+                        <tr>
+                          <td>
+                            {{ forloop.counter }}
+                          </td>
+                          <td >
+                            <a href="{% url 'detaildocument' doc.id %} ">{{doc.agency_name}} </a>
+                          </td>
+                          <td>
+                            {{doc.student_name}}
+                          </td>
+                          <td>
+                            {{doc.Mobilenumber}}
+                          </td>
+                          
+                          <td>
+                            {{doc.university}}
+                          </td>
+                          {% if filterby == 'agency' %}
+                          <td class="text-danger">
+                            {{doc.submitting_for}}
+                          </td>
+                          {% else %}
+                          <td>
+                            {{doc.submitting_for}}
+                          </td>
+                          {% endif %}
+                          
+                          <td>
+                            {{doc.tacking_no}}
+                          </td>
+                          <td>
+                            {{doc.created_date| date:"M d, Y"}}
+                          </td>
+                         
+                         
+                          <td class="text-danger">
+                            <b>
+                              {{doc.status}}
+                          </td>
+                          {% else %}              
+                        </tr>
+                        {% endif %}   
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">processing Document</h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                          Sl no.
+                          </th>
+                          <th>
+                            Agency name
+                          </th>
+                          <th>
+                            Student name
+                          </th>
+                          <th>
+                            Mobile number
+                          </th>
+                          <th>
+                            University
+                          </th>
+                          <th>
+                            submitting for
+                          </th>
+                          <th>
+                            Tracking no.
+                          </th>
+                          <th>
+                            Submitted Date
+                          </th>
+                          
+                          
+                           <th>
+                            Status
+                           </th>
+ 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for doc in processingddoc %}
+                       
+                        <tr>
+                          <td>
+                            {{ forloop.counter}}
+                          </td>
+                          <td>
+                            <a href="{% url 'detaildocument' doc.id %} ">{{doc.agency_name}} </a>
+                          </td>
+                          <td>
+                            {{doc.student_name}}
+                          </td>
+                          <td>
+                            {{doc.Mobilenumber}}
+                          </td>
+                          <td>
+                            {{doc.university}}
+                          </td>
+                          <td>
+                            {{doc.submitting_for}}
+                          </td>
+                          <td>
+                            {{doc.tacking_no}}
+                          </td>
+                          <td>
+                            {{doc.created_date| date:"M d, Y"}}
+                          </td>
+                          
+                          <td class="text-warning">
+                            <b>
+                              {{doc.status}}
+                          </td>
+
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Closed Document table</h4>
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th>
+                          Sl no.
+                          </th>
+                          <th>
+                            Agency name
+                          </th>
+                          <th>
+                            Student name
+                          </th>
+                          <th>
+                            Mobile number
+                          </th>
+                          <th>
+                            University
+                          </th>
+                          <th>
+                            submitting for
+                          </th>
+                          <th>
+                            Tracking no.
+                          </th>
+                          <th>
+                            Submitted Date
+                          </th>
+                          
+                          
+                           <th>
+                            Status
+                           </th>
+ 
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for doc in closeddoc %}
+                        
+                        <tr>
+                          <td>
+                            {{ forloop.counter}}
+                          </td>
+                          <td>
+                            <a href="{% url 'detaildocument' doc.id %} ">{{doc.agency_name}} </a>
+                          </td>
+                          <td>
+                            {{doc.student_name}}
+                          </td>
+                          <td>
+                            {{doc.Mobilenumber}}
+                          </td>
+                          <td>
+                            {{doc.university}}
+                          </td>
+                          <td>
+                            {{doc.submitting_for}}
+                          </td>
+                          <td>
+                            {{doc.tacking_no}}
+                          </td>
+                          <td>
+                            {{doc.created_date| date:"M d, Y"}}
+                          </td>
+                          
+                          <td class="text-success">
+                            <b>
+                              {{doc.status}}
+                          </td>
+
+                          <td>
+                          
+                          </td>
+                        </tr>
+                      
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div
+        
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+   <!-- partial -->
+  </div>
+  {% endblock %}

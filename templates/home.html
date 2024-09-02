@@ -1,0 +1,37 @@
+{% extends 'navforhome.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<br>
+<br>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="font-weight-bold mb-0">Arriba tracking</h4>
+                </div>
+                
+                
+              </div>
+            </div>
+          </div>
+          <div class="row">
+          <form class="pt-3" method="POST" action="{% url 'trackdocument' %}" >
+            {% csrf_token %}
+            <div class="form-group col-xs-6">
+              <input type="text" class="form-control" name= "tracking_number" required placeholder="tracking number">
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-dark btn-icon-text btn-rounded">Track</button>
+                  </div>
+           
+          </form>
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+   
+     
+
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'navforhome.html' %}
+{% load static %}
+{% block content %}
+
+<br>
+<br>
+<br>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                        <div>
+                            <h4 class="font-weight-bold mb-0">Document details</h4>
+                          </div>
+
+                          {% if tracks %}
+
+                          <div class="info-grid">
+
+                          <div class="info-item">
+                              <p class="label">tacking no</p>
+                              <p class="value"> {{doc.tacking_no}}</p>
+                          </div>
+                          <div class="info-item">
+                              <p class="label">submitted date</p>
+                              <p class="value">{{doc.created_date| date:"M d, Y"}}</p>
+                          </div>
+                          <div class="info-item">
+                              <p class="label">status</p>
+                              <p class="value">{{doc.status}}</p>
+                          </div> 
+                          {% endif %}
+                      </div>
+                    </div>
+                      </div>
+                    </div>
+                  </div>
+              
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                      <div class="card-body">
+                      
+                              <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                  <h4 class="font-weight-bold mb-0">Document Tracking</h4>
+                                </div>
+                                <div>
+                                 
+                                  <br>
+                                </div>
+                              </div>
+                            <br>
+                            {% if tracks %}
+                            {% for track in tracks %}
+                                <div class="col-md-12 grid-margin">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                        <i class="ti-package icon-sd text-success" >
+                        </i><span class="display-5"><b> {{track.title}}</span>
+                      </div>
+                    </div>
+                         <ul class="list-ticked"> 
+                            <li class="lead">
+                                {{track.date}}
+                            </li>
+                            {% if track.comment_1 %}
+                                <li class="lead">
+                                    {{track.comment_1}}
+                                </li>
+                            {% endif %}
+                            {% if track.comment_2 %}
+                            <li class="lead">
+                                {{track.comment_2}}
+                            </li>
+                        {% endif %}
+                        </ul>
+                            {% endfor %}
+                            {% else %}
+                            {{error}}
+                            {% endif %}
+                        </div>
+                        <div>
+                           
+                            <a href="{% url 'trackdocument' %}">
+                              <button type="button" class="btn btn-dark btn-icon-text btn-rounded">
+                                <i class="ti-arrow-left btn-icon-prepend"></i>Go back
+                              </button>
+
+                            </a>
+                           
+                            <div>
+                          </div>
+                          <br>
+                        </div>
+                    </div>
+              
+                </div>
+            
+        <!-- content-wrapper ends -->
+        <!-- partial:partials/_footer.html -->
+   
+     
+
+{% endblock %}

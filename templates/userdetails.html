@@ -1,0 +1,131 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content %}
+
+<body>
+<div class="main-panel">
+    <div class="content-wrapper">
+      <div class="row">
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="font-weight-bold mb-0">Your Profile</h4>
+                    </div>
+                    <div>
+                        {% if userdetails.role == 'admin' %}
+                        <form action="">
+                            <button type="submit" class="btn btn-outline-secondary btn-icon-text">
+                               Edit
+                                <i class="ti-file btn-icon-append"></i>                          
+                              </button>
+                              
+                            </form>
+                            {% endif %}
+                      </div>
+                  </div>
+              <div class="info-grid">
+                <div class="info-item">
+                    <p class="label">Id</p>
+                    <p class="value">{{userdetails.employeeid}}</p>
+                </div>
+                <div class="info-item">
+                    <p class="label">Name</p>
+                    <p class="value">{{userdetails.name}}</p>
+                </div>
+                <div class="info-ite">
+                    <p class="label">Mobile Number</p>
+                    <p class="value">{{userdetails.mobile_number}}</p>
+                </div>  
+                <div class="info-item">
+                    <p class="label">Email id</p>
+                    <p class="value">{{userdetails.email}}</p>
+                </div>
+                <div class="info-item">
+                    <p class="label">Role</p>
+                    <p class="value"> {{userdetails.role}}</p>
+                </div>
+                {% if userdetails.role == 'admin' %}
+                <div class="info-item">
+                    <p class="label">group</p>
+                    <p class="value"> {{userdetails.group}}</p>
+                </div>
+                {% endif %}
+                <div class="info-item">
+                    <p class="label">Location</p>
+                    <p class="value"> {{userdetails.location}}</p>
+                </div> 
+                </div> 
+            </div>
+            </div>
+          </div>
+        </div>
+        {% if userdetails.role == 'admin' %}
+        {% for employee_detail in employee_details%}
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h4 class="font-weight-bold mb-0">Employee Profile</h4>
+                    </div>
+                    <div>
+                        {% if userdetails.role == 'admin' %}
+                        <form action="{% url 'edituserprofile' employee_detail.id %}">
+                            <button type="submit" class="btn btn-outline-secondary btn-icon-text">
+                               Edit
+                                <i class="ti-file btn-icon-append"></i>                          
+                              </button>
+                              
+                            </form>
+                            {% endif %}
+                      </div>
+                  </div>
+              <div class="info-grid">
+                <div class="info-item">
+                    <p class="label">Id</p>
+                    <p class="value">{{employee_detail.employeeid}}</p>
+                </div>
+                <div class="info-item">
+                    <p class="label">Name</p>
+                    <p class="value">{{employee_detail.name}}</p>
+                </div>
+                <div class="info-ite">
+                    <p class="label">Mobile Number</p>
+                    <p class="value">{{employee_detail.mobile_number}}</p>
+                </div>  
+                <div class="info-item">
+                    <p class="label">Email id</p>
+                    <p class="value">{{employee_detail.email}}</p>
+                </div>
+                <div class="info-item">
+                    <p class="label">Role</p>
+                    <p class="value"> {{employee_detail.role}}</p>
+                </div>
+               
+               
+              
+                <div class="info-item">
+                    <p class="label">Location</p>
+                    <p class="value"> {{employee_detail.location}}</p>
+                </div> 
+                <div class="info-item">
+                  <p class="label">group</p>    
+                      <button type="button" class="btn btn-outline-primary  dropdown-toggle" data-bs-toggle="dropdown">{{employee_detail.group}}</button>
+                      <div class="dropdown-menu" name="open">
+                          <a href="{% url 'updategroupadmin' employee_detail.id %}" class="dropdown-item">Admin</a>
+                        <a  href="{% url 'updategroupsassociate' employee_detail.id %}"class="dropdown-item" >associate</a>
+                         <a  href="{% url 'updategroupstaff' employee_detail.id %}"class="dropdown-item">staff</a>   
+                         <a  href="{% url 'updategroupfresher' employee_detail.id %}"class="dropdown-item">	fresher</a>                   
+                    </div>
+              </div> 
+                </div> 
+            </div>
+            </div>
+          </div>
+          {% endfor %}
+              {% endif %}
+        </body>
+{% endblock %}

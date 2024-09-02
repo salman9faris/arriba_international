@@ -1,0 +1,44 @@
+{% extends 'navbar.html' %}
+{% load static %}
+{% block content %}
+    <!-- partial -->
+    
+      <!-- partial -->
+      <div class="main-panel">        
+        <div class="content-wrapper">
+          
+          <div class="row">
+            <div class="col-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">{{value}}</h4>
+                  <form class="forms-sample" method="POST" action="">
+                    {% csrf_token %} 
+                    {% for forms in form %}
+                    <div class="form-group">
+                      <label for="exampleTextarea1">{{forms.label}}</label>
+                      
+                    {{forms}}
+                    </div>
+                  
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary me-2">Submit</button>
+                  </form>
+     
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+
+ 
+
+  {% endblock %}
+
+  
