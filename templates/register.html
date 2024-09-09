@@ -34,22 +34,47 @@
               <h6 class="font-weight-light">Signing here</h6>
               <form class="pt-3" method="POST" action="{% url 'registeruser' %}" >
                 {% csrf_token %}
+                <div class="form-group">
+                  
                 {{form.username}}
-                <br>
+                {% for error in form.username.errors %}
+                <p class="text-danger">{{error}}</p>
+                {% endfor %}
+              </div>
+                <div class="form-group">
                 {{form.email}}
-                <br>
+                {% for error in form.email.errors %}
+                <p class="text-danger">{{error}}</p>
+                {% endfor %}
+              </div>
+                <div class="form-group">
                 {{form.mobilenumber}}
-                <br>
+                {% for error in form.mobilenumber.errors %}
+                <p class="text-danger">{{error}}</p>
+                {% endfor %}
+              </div>
+                <div class="form-group">
                 {{form.password1}}
-                <br>
+              </div>
+                <div class="form-group">
                 {{form.password2}}
+                {% for error in form.password2.errors %}
+                <p class="text-danger">{{error}}</p>
+                {% endfor %}
+              </div>
+
               
-                
+               
                 
                 <div class="mt-3">
                   <button type="submit" class="btn btn-primary me-2">Sign in</button>
+
                 </div>
-             
+                {% if messages %}
+                {% for message in messages%}
+                <p class="text-danger"><b>{{message}}</p>
+                {% endfor %}
+                {% endif %}
               </form>
             </div>
           </div>

@@ -153,9 +153,9 @@ class CustomUserCreationForm(UserCreationForm):
                         "password2":"password2",
                         'class':'form-control',
                         'required':"",
-                        'placeholder':'password2',
+                        'placeholder':'confirm password',
                         'type':"password2",
-                       
+
                         'minlength':'6'
                         
                     })
@@ -169,6 +169,15 @@ class CustomUserCreationForm(UserCreationForm):
 
         }
         
+
+    def clean(self):  
+        cleaned_data=super().clean()
+        username = cleaned_data.get("usernmae")
+        print("ckeand data valid")
+        if username and len(username)<8:
+            self.add_error('username',"name should be more big")
+        return username  
+  
     class Meta:
         model = User
         fields = ('username', 'email', 'mobilenumber', 'password1', 'password2' )
@@ -180,7 +189,7 @@ class CustomUserCreationForm(UserCreationForm):
             
        
             'username':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'username'
+                'class':'form-control','placeholder':'username',"id":"username"
             }),
               'email':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'email'
@@ -189,14 +198,15 @@ class CustomUserCreationForm(UserCreationForm):
                 'class':'form-control','placeholder':'mobilenumber'
             }),
              'password1':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'password1'
+                'class':'form-control','placeholder':'password'
             }),
+           
 
 
             }
 
-    def username_clean(self):  
-        username = self.cleaned_data['username'].lower() 
+    def clean_username(self):  
+        username = self.cleaned_data['username']
         return username  
   
     def email_clean(self):  
@@ -212,9 +222,12 @@ class CustomUserCreationForm(UserCreationForm):
   
         if password1 != password2:  
             raise ValidationError("Password don't match")  
-        return password2  
+        return password1
   
     def save(self, commit = True):  
+
+
+        
         user = User.objects.create_user(  
             self.cleaned_data['username'],  
             self.cleaned_data['email'],  

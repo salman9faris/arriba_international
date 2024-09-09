@@ -304,19 +304,26 @@ def registeruser(request):
                 mobile_number=form.cleaned_data['mobilenumber']
                 password1=form.cleaned_data['password1']
                 password2=form.cleaned_data['password2']
-                user=form.save()
-                group=Group.objects.get(name="admin") 
-                user.groups.add(group)
-                employee_id=str(random.randint(12000,95000))
-                profile,created=Userprofile.objects.get_or_create(name=user,employeeid=employee_id,
-                                                                email=user.email,mobile_number=mobile_number,group="admin")
-                profile.save()
-                login(request,user)
-                return redirect("profile")
+               
+                if Group.objects.get(name="fresher"):
+                    user=form.save()
+                    group=Group.objects.get(name="fresher") 
+                    user.groups.add(group)
+                    employee_id=str(random.randint(12000,95000))
+                    profile,created=Userprofile.objects.get_or_create(name=user,employeeid=employee_id,
+                                                                    email=user.email,mobile_number=mobile_number,group="fresher")
+                    profile.save()
+                    login(request,user)
+                    return redirect("profile")
+                else:
+                    messages.error(request,"contact admin")
+                    args['form'] = form
+                    return render(request,"register.html",args)
+                
             
         except:
-            messages.error(request,"someting went wrong")
-           
+            args['form'] = form
+            return render(request,"register.html",args)
      
             
     args['form'] = form
