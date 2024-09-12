@@ -1,7 +1,10 @@
 
 from django.contrib import admin
 from django.urls import path,include
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from django.conf import settings # to import static in deployment
+from django.conf.urls.static import static # to import static in deployment
+
 urlpatterns = [
     path("", include("dashboard.urls")),
     path("", include("home.urls")),
@@ -9,3 +12,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+urlpatterns = [
+
+
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

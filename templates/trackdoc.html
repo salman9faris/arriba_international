@@ -2,15 +2,12 @@
 {% load static %}
 {% block content %}
 
-<br>
-<br>
-<br>
-      <div class="main-panel">
+
+   
         <div class="content-wrapper">
           <div class="row">
             <div class="col-md-12 grid-margin">
               <div class="d-flex justify-content-between align-items-center">
-                
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                       <div class="card-body">
@@ -35,35 +32,32 @@
                               <p class="value">{{doc.status}}</p>
                           </div> 
                           {% endif %}
+                        </div>
                       </div>
                     </div>
-                      </div>
+                     
                     </div>
                   </div>
               
-                <div class="col-lg-12 grid-margin stretch-card">
+                  <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                       <div class="card-body">
-                      
                               <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                   <h4 class="font-weight-bold mb-0">Document Tracking</h4>
                                 </div>
-                                <div>
-                                 
-                                  <br>
-                                </div>
+                                
                               </div>
                             <br>
                             {% if tracks %}
                             {% for track in tracks %}
-                                <div class="col-md-12 grid-margin">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                    <div>
+                            <div class="col-md-12 grid-margin">
+                                <div class="d-flex justify-content-between align-items-center">
+                              <div>
                         <i class="ti-package icon-sd text-success" >
                         </i><span class="display-5"><b> {{track.title}}</span>
-                      </div>
-                    </div>
+                         </div>
+                       </div>
                          <ul class="list-ticked"> 
                             <li class="lead">
                                 {{track.date}}
@@ -85,21 +79,21 @@
                             {% endif %}
                         </div>
                         <div>
-                           
                             <a href="{% url 'trackdocument' %}">
                               <button type="button" class="btn btn-dark btn-icon-text btn-rounded">
                                 <i class="ti-arrow-left btn-icon-prepend"></i>Go back
                               </button>
-
                             </a>
-                           
-                            <div>
-                          </div>
-                          <br>
                         </div>
+                      </div>
                     </div>
-              
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            
             
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->

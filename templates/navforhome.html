@@ -1,9 +1,12 @@
 {% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arriba</title>
+    <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Arriba international</title>
@@ -15,32 +18,223 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'images/arriba_single.png' %}" />
+<style>
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column; /* Stack logo and name vertically */
+  align-items: left; /* Center the logo and name */
+}
+
+.logo-img {
+  width: 80px;
+  height: 30px;
+  margin-bottom: .5px; /* Space between logo and company name */
+}
+
+.company-name {
+  color: black;
+  font-size: .75em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 20px;
+}
+
+.nav-links a {
+    color: black;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+.nav-links a:hover {
+    color: #f0a500;
+}
+
+footer {
+  background-color: #184D47;
+  color: white;
+  padding: 40px 20px;
+  text-align: left;
+  
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+  margin: 10px 0;
+}
+
+.footer-section h3 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1em;
+  
+}
+
+.footer-section ul li a:hover {
+  color: #f0a500;
+}
+
+.footer-section address {
+  line-height: 1.8;
+}
+
+.social-media a {
+  display: inline-block;
+  margin-right: 15px;
+  color: white;
+  font-size: 1.1em;
+  text-decoration: none;
+}
+
+.social-media a:hover {
+  color: #f0a500;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #444;
+}
+
+.footer-bottom p {
+  font-size: 0.9em;
+  color: #bbb;
+}
+
+.social-media-icons a {
+  color: #black;
+  font-size: 24px;
+  margin: 0 10px;
+  text-decoration: none;
+}
+
+.social-media-icons a:hover {
+  color: #f0a500; /* Change color on hover */
+}
+
+
+</style>
 </head>
 <body>
-  <div class="container-scroller">
-    
-    <!-- partial:partials/_navbar.html -->
-    <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo me-5" href="{% url 'dashboard' %}">
-          <img src="{% static 'images/arriba_single.png' %}" class="me-2" alt="logo"/></a>
-          <a class="navbar-brand brand-logo-mini" href="{% url 'dashboard' %}"><img src="{% static 'images/arriba_single.png' %}" alt="logo"/></a>
-         </div>
-      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-       
-       
-            
-            
-           
-              
-         
+
+    <nav>
+        <div class="logo">
+            <img src="{% static 'images/arriba_single.png' %}" alt="Company Logo" class="logo-img">
+            <span class="company-name">International</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Contact</a></li>
+          
+        </ul>
     </nav>
+
+
 
     {% block content %}
 
     {% endblock content %}
+
+    <footer>
+      <div class="footer-container">
+          <div class="footer-section">
+              <h3>Company</h3>
+              <ul>
+                  <li><a href="#">About Us</a></li>
+                  <li><a href="#">Careers</a></li>
+                  <li><a href="#">Blog</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-section">
+              <h3>Contact</h3>
+              <ul>
+                  <li><a href="#">Email Us</a></li>
+                  <li><a href="#">Customer Support</a></li>
+                  <li><a href="#">FAQs</a></li>
+              </ul>
+          </div>
+
+          <div class="footer-section">
+              <h3>Address</h3>
+              <address>
+                  1234 Business Road,<br>
+                  Business City, XYZ 56789<br>
+                  Phone: (123) 456-7890
+              </address>
+          </div>
+
+          <div class="footer-section social-media">
+              <h3>Follow Us</h3>
+              <div class="social-media-icons">
+                <a href="https://www.facebook.com" ><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.linkedin.com" target="_blank"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+      </div>
+
+      <div class="footer-bottom">
+          <p>&copy; 2024 arriba international. All rights reserved.</p>
+      </div>
+  </footer> 
     <!-- partial -->
 
 <!-- main-panel ends -->
