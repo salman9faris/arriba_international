@@ -10,9 +10,4 @@ urlpatterns = [
     path("", include("home.urls")),
     path("api", include("api.urls")),
     path('admin/', admin.site.urls),
-]
-
-urlpatterns = [
-
-
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
