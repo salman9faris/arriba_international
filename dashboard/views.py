@@ -233,9 +233,9 @@ def docbycountry(request,pk):
     opendoc_count=opendoc.count()
     totaldoc_count=opendoc_count+closeddoc.count()+processing_count
     context={
-         "filterby":filterby,
-         "value":value,
-          "opendoc_count":opendoc_count,
+        "filterby":filterby,
+        "value":value,
+        "opendoc_count":opendoc_count,
         "processin_count":processing_count,
         "totaldoc_count":totaldoc_count,
         "opendoc":opendoc,
@@ -260,6 +260,7 @@ def updateclosed(request,pk):
 @entry_staff
 def updateopen(request,pk):
     doc=Document.objects.get(id=pk)
+    doc.tracking="True"
     doc.status="open"
     doc.save()
     return redirect(request.META['HTTP_REFERER'])
@@ -268,6 +269,7 @@ def updateopen(request,pk):
 @entry_staff
 def updateprocessing(request,pk):
     doc=Document.objects.get(id=pk)
+    doc.tracking="True"
     doc.status="processing"
     doc.save()
     return redirect(request.META['HTTP_REFERER'])
