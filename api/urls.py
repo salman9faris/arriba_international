@@ -3,8 +3,9 @@
 from django.contrib import admin
 from django.urls import path,include
 from home import views
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
 urlpatterns = [
+      path("      ",views.testarriba,name="testarriba"),
       path("alldoc",views.alldocapi,name='alldocapi'),  
       path("doc/<pk>",views.docapi,name='docapi'),  
       path("allagency",views.allagencyapi,name='allagencyapi'),

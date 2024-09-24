@@ -63,18 +63,18 @@
                 {% endfor %}
               </div>
 
-              
+              {% if messages %}
+              {% for message in messages%}
+              <p class="text-danger"><b>{{message}}</p>
+              {% endfor %}
+              {% endif %}
                
                 
                 <div class="mt-3">
                   <button type="submit" class="btn btn-primary me-2">Sign in</button>
 
                 </div>
-                {% if messages %}
-                {% for message in messages%}
-                <p class="text-danger"><b>{{message}}</p>
-                {% endfor %}
-                {% endif %}
+             
               </form>
             </div>
           </div>

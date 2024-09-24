@@ -23,19 +23,19 @@ class adddocForm(forms.ModelForm):
         }
         widgets={
             'agency_name':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'Agency Name'
+                'class':'form-control','placeholder':'Agency Name','required':"",
             }),
             "student_name":forms.TextInput(attrs={
-                'class':'form-control','placeholder':'Student Name'
+                'class':'form-control','placeholder':'Student Name','required':"",
             }),
             'university':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'University'
+                'class':'form-control','placeholder':'University','required':"",
             }),
             'submitting_for':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'Submitting for'
+                'class':'form-control','placeholder':'Submitting for','required':"",
             }),
             'Mobilenumber':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'Mobile number'
+                'class':'form-control','placeholder':'Mobile number','required':"",
             }),
             'comment':forms.Textarea(attrs={
                 'class':'form-control','placeholder':'Comment', 'rows':"2"
@@ -58,11 +58,11 @@ class TrackingForm(forms.ModelForm):
         }
         widgets={
             'title':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'title'
+                'class':'form-control','placeholder':'title','required':"",
             }),
        
             'comment_1':forms.TextInput(attrs={
-                'class':'form-control','placeholder':'first event'
+                'class':'form-control','placeholder':'first event','required':"",
             }),
             'comment_2':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'second event'
@@ -173,7 +173,7 @@ class CustomUserCreationForm(UserCreationForm):
     def clean(self):  
         cleaned_data=super().clean()
         username = cleaned_data.get("usernmae")
-        print("ckeand data valid")
+       
         if username and len(username)<8:
             self.add_error('username',"name should be more big")
         return username  

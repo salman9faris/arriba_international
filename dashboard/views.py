@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseRedirect
 from dashboard.decorators import unauthencticated_user,admin_only,entry_staff,associate_staff
 from .form import adddocForm,TrackingForm,userprofileform
-from .models import Document,Trackingevent,Agency,Country,Totalcount,Userprofile
+from .models import Document,Trackingevent,Agency,Totalcount,Userprofile
 import random,datetime,calendar,string
 from django.db.models import Count
 from django.contrib.auth.models import User,Group
@@ -296,15 +296,20 @@ def loginuser(request):
 
 def registeruser(request):  
     args={}
+
     form = CustomUserCreationForm(request.POST)  
     if request.method=='POST':
-        form = CustomUserCreationForm(request.POST) 
+        groups=["admin","associate","staff","fresher"]
+        form = CustomUserCreationForm(request.POST)
+        for group in groups:
+            group_item,created=Group.objects.get_or_create(name=group)
+            group_item.save()
         try:
             if form.is_valid():
                 mobile_number=form.cleaned_data['mobilenumber']
                 password1=form.cleaned_data['password1']
                 password2=form.cleaned_data['password2']
-               
+                
                 if Group.objects.get(name="fresher"):
                     user=form.save()
                     group=Group.objects.get(name="fresher") 
@@ -316,12 +321,13 @@ def registeruser(request):
                     login(request,user)
                     return redirect("profile")
                 else:
-                    messages.error(request,"contact admin")
                     args['form'] = form
                     return render(request,"register.html",args)
                 
             
         except:
+            messages.error(request,"contact admin")
+            print(messages)
             args['form'] = form
             return render(request,"register.html",args)
      

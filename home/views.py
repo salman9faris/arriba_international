@@ -44,6 +44,11 @@ def alldocapi(request):
         docserializer=Documentserializer(alldoc,many=True)
      return Response(docserializer.data,)
 
+@api_view(['GET'])
+def testarriba(request):
+     
+     return Response("working api")
+
 
 @api_view(['GET'])
 def docapi(request,pk):
