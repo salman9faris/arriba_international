@@ -1,5 +1,5 @@
 from django import forms
-from .models import Document,Trackingevent,Userprofile
+from .models import Document, Invoicedetails,Trackingevent,Userprofile,Agency
 from django import forms  
 from django.contrib.auth.models import User  
 from django.contrib.auth.forms import UserCreationForm  
@@ -70,6 +70,86 @@ class TrackingForm(forms.ModelForm):
 
 
         }
+
+
+
+class Agencydetailsform(forms.ModelForm):
+    class Meta:
+        model = Agency
+        fields = ( 'Mobilenumber','address')
+        labels= {
+            'Mobilenumber':'Mobilenumber',
+           
+            'address':'address',
+          
+           
+        }
+        widgets={
+            'Mobilenumber':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'Contace number',
+            }),
+       
+            'address':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'address',
+            }),
+           
+
+        }
+
+
+
+
+
+class Addinvoiceform(forms.ModelForm):
+    class Meta:
+        model = Invoicedetails
+        fields = ( 'billing_to','description','quantity','payment_status',"price","paid")
+        labels= {
+           
+           'billing_to':"Customer Address",'description':"description",'quantity':"quantity","price":"price",
+           "paid":"paid amount"
+           
+        }
+        widgets={
+            'billing_to':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'Customer Address','required':"",'size': 40
+            }),
+            
+       
+            'description':forms.TextInput(attrs={
+                'class':'form-control','placeholder':'description','required':""
+            }),
+            'quantity':forms.NumberInput(attrs={   
+                'style': 'width:10ch',
+                
+                'max': '99',
+                'min': '1',
+            }),
+              'payment_status ':forms.Select(attrs={
+            'class': 'custom-select',      # Custom CSS class
+            'id': 'choice-field-id',       # Custom ID for styling
+            'style': 'background-color: #e9e9e9;',  # Inline style
+            'data-info': 'choice-field',   # Custom data attribute
+        }),
+        
+
+            'price':forms.NumberInput(attrs={
+                'class':'form-control','placeholder':'price of one quantity','required':"",'size': 40
+            }), 
+            'paid':forms.NumberInput(attrs={
+                'class':'form-control','placeholder':'price of one quantity','size': 40
+            }), 
+
+        }
+        
+        def total(self):
+            price=self.cleaned_data['price']
+            quanitit=self.cleaned_data['quantity']
+            print("price",price)
+
+
+
+
 
         
 class userprofileform(forms.ModelForm):
@@ -173,7 +253,6 @@ class CustomUserCreationForm(UserCreationForm):
     def clean(self):  
         cleaned_data=super().clean()
         username = cleaned_data.get("usernmae")
-       
         if username and len(username)<8:
             self.add_error('username',"name should be more big")
         return username  
@@ -186,8 +265,6 @@ class CustomUserCreationForm(UserCreationForm):
         }
   
         widgets={
-            
-       
             'username':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'username',"id":"username"
             }),
@@ -200,9 +277,6 @@ class CustomUserCreationForm(UserCreationForm):
              'password1':forms.TextInput(attrs={
                 'class':'form-control','placeholder':'password'
             }),
-           
-
-
             }
 
     def clean_username(self):  

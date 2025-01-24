@@ -8,12 +8,13 @@
             <div class="col-md-12 grid-margin">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 class="font-weight-bold mb-0">Arriba Dashboard</h4>
+                  <h4 class="font-weight-bold mb-0">Arriba Trending</h4>
                 </div>
                 <div>
                   <a href="{% url 'refreshdoc' %}">
-                    <button type="button" class="btn btn-dark btn-icon-text btn-rounded">
-                      <i class="ti-reload btn-icon-prepend"></i>Refresh
+                    <button type="submit" class="btn-sm btn-add" >
+                                        
+                      <i class="ti-reload"  ></i>             
                     </button>
                   </a>
                 </div>
@@ -28,7 +29,7 @@
                   <p class="card-title text-md-center text-xl-left">Total Document</p>
                   <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
                     <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{count.total_doc}}</h3>
-                    <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    <i class="ti-align-center icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                   </div>  
                   </div>
               </div>
@@ -40,7 +41,7 @@
                   <p class="card-title text-md-center text-xl-left">opened Document</p>
                   <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
                     <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{count.opened_doc}}</h3>
-                    <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    <i class="ti-book icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                   </div>  
                   </div>
               </div>
@@ -51,7 +52,7 @@
                   <p class="card-title text-md-center text-xl-left">Processing Document</p>
                   <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
                     <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{count.processing}}</h3>
-                    <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    <i class="ti-loop icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                   </div>  
                  </div>
               </div>
@@ -63,7 +64,7 @@
                   <p class="card-title text-md-center text-xl-left">closed Document</p>
                   <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
                     <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{count.closed_doc}}</h3>
-                    <i class="ti-layers-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                    <i class="ti-stamp icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
                   </div>  
                  
                 </div>
@@ -71,6 +72,97 @@
             </div>
             {% endfor %}
           </div>
+
+
+
+          <div>
+            <h4 class="font-weight-bold mb-0">Today Trending</h4>
+          </div>
+          <br>
+          <div class="row">
+            {% for count in total_count %}
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Today recieved Documents</p>
+                  <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{todaycount}}</h3>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  </div>  
+                  </div>
+              </div>
+            </div>
+            
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Latest Updates</p>
+                  <div class="">
+  
+                  </div>  
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Today recieved payments</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    
+                  
+                  </div>  
+                 </div>
+              </div>
+
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Today closed Document</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                   
+                  </div>  
+                 
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+
+
+
+          
+          <div>
+            <h4 class="font-weight-bold mb-0">Top Trending</h4>
+          </div>
+          <br>
+
+          <div class="row">
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">Total Agencies</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{agencycount}}</h3>
+                  <i class="ti-world icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+                </div>
+            </div>
+          </div>
+          
+          <div class="col-md-3 grid-margin stretch-card">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title text-md-center text-xl-left">Total Countries</p>
+                <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                  <h3 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{countrycount}}</h3>
+                  <i class="ti-map-alt icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                </div>  
+                </div>
+            </div>
+          </div>
+        </div>
+
+
           <div class="row">
             <div class="col-md-7 grid-margin stretch-card">
               <div class="card">
@@ -97,6 +189,12 @@
                        {% endfor %}
                       </tbody>
                     </table>
+                    <a href="{% url 'topdocument' %}">
+                    <button type="submit" class="btn-sm btn-del" >
+                                        
+                    </i> view all         
+                   </button>
+                  </a>
                   </div>
                 </div>
               </div>
@@ -117,16 +215,24 @@
                           </tr>
                         </thead>
                         <tbody>
-                          {% for country in country_count %}
+                          {% for country in country %}
                           <tr>
-                            <td><a  href="{% url 'docbycountry' country.submitting_for %}"> {{country.submitting_for}}</a></td>
-                            <td>{{country.count}}</td>
+                            <td><a href="{% url 'docbycountry' country.country %}" >{{country.country}}</a></td>
+                            <td>{{country.total_doc}}</td>
                           </tr>
                          {% endfor %}
                           
                         </tbody>
+                     
                       </table>
+                     
                     </div>
+                    <a href="{% url 'topdocumentcountry' %}">
+                    <button type="submit" class="btn-sm btn-del" >
+                                        
+                     </i> view all         
+                    </button>
+                  </a>
                   </div>
 								</div>
 							</div>

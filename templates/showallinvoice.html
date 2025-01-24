@@ -1,0 +1,353 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block content %}
+     
+<div class="main-panel">
+        <div class="content-wrapper">
+          <div class="row">
+            <div class="col-md-12 grid-margin">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h4 class="font-weight-bold mb-0">Arriba Invoice Dashboard</h4>
+                  
+                </div>
+                
+                <div>
+                    <button  type="submit" class="btn-sm btn-add   btn-icon-text " onclick="myFunction()"   >
+                      <i class="ti-eye"  ></i>   
+                    </button>
+                    <a href="{% url 'refreshinvoice' %}">
+                    <button type="submit" class="btn-sm btn-edt" >
+                                        
+                      <i class="ti-reload"  ></i>                          
+                     </button></a>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+      
+          <div  class="row" >
+            
+            <div  class="col-md-3 grid-margin stretch-card">
+              
+              <div id="total"   class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Total</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h4  class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{total}}</h4>
+                    <i class="ti-calendar icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  </div>
+              </div>
+            </div>
+            
+            <div class="col-md-3 grid-margin stretch-card">
+              <div id="paid"  class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Paid</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{paid}}</h4>
+                    <i class="ti-user icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+              <div id="balance"  class="card">
+                <div class="card-body">
+                  <p class="card-title text-md-center text-xl-left">Balance</p>
+                  <div class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
+                    <h4 class="mb-0 mb-md-2 mb-xl-0 order-md-1 order-xl-0">{{balance}}</h4>
+                    <i class="ti-agenda icon-md text-muted mb-0 mb-md-3 mb-xl-0"></i>
+                  </div>  
+                 </div>
+              </div>
+
+            </div>
+            
+        
+           
+
+            <div class="col-lg-12 grid-margin stretch-card">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Payment Pending</h4>
+                  
+                  <div class="table-responsive pt-3">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                         
+                          <th>
+                            Invoice no.
+                          </th>
+                          <th>
+                            Billing date
+                          </th>
+                          <th>
+                            Student name
+                          </th>
+                          <th>
+                            billing to
+                          </th>
+                         <th>
+                          description
+                         </th>
+                          <th>
+                            Quantity
+                          </th>
+                          <th>
+                            price
+                          </th>
+                          <th>
+                            Total
+                          </th>
+                          <th>
+                           Paid
+                          </th>
+                          
+                           <th>
+                            Balance
+                           </th>
+                          
+                          
+                           <th>
+                            Doc Status
+                           </th>
+                           <th>
+                           view 
+                           </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for pendinginvoice in pendinginvoices %}
+                        {% if pendinginvoice.payment_status == "pending" %}
+                        <tr>
+                          
+                          <td>
+                            {{pendinginvoice.invoice_number}}
+                          </td>
+                          <td>
+                            {{pendinginvoice.billing_date| date:"M d, Y"}}
+                           </td>
+                          
+                          <td>
+                            <a href="{% url 'detaildocument' pendinginvoice.document.id %} ">
+                               {{pendinginvoice.document.student_name}}
+                            </a>  </td>
+                         
+                          <td>
+                            {{pendinginvoice.billing_to|linebreaksbr|slice:":10"}}
+                          </td>
+                          <td>
+                           {{pendinginvoice.description|linebreaksbr|slice:":20"}}
+                          
+                          </td>
+                          <td>
+                            {{pendinginvoice.quantity}}
+                          </td>
+                          <td>
+                            {{pendinginvoice.price}}
+                          </td>
+                          <td>
+                            {{pendinginvoice.total}}
+                          </td>
+                          <td>
+                            {{pendinginvoice.paid}}
+                          </td>
+                          <td class="text-danger">
+                            {{pendinginvoice.balance}}
+                          </td>
+                          
+                         
+                          
+                          
+
+                          {% if pendinginvoice.document.status == "open" %}
+                            <td class="text-danger">
+                              <b>{{pendinginvoice.document.status}}
+                            {% elif pendinginvoice.document.status == "processing" %}
+                            <td class="text-warning">
+                             <b> {{pendinginvoice.document.status}}
+                              {% else %}
+                            <td class="text-success">
+                                <b> {{pendinginvoice.document.status}}
+{% endif %}
+                          </td>
+
+
+                          <td >
+                            <a href="{% url 'viewinvoice' pendinginvoice.id %}" >   
+                            <button type="submit" class="btn-sm btn-add"  >
+                                          
+                             <i class="ti-printer" style='font-size:18px;margin-left:1px' ></i>                         
+                              </button></a>
+                          </td>
+                        </tr>
+                        
+                        {% endif %}
+                      {% endfor %}
+                      
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+            
+
+  <div class="col-lg-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Payment closed</h4>
+        
+        <div class="table-responsive pt-3">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+              
+               <th>
+              Invoice no.
+              </th>
+              <th>
+                Billing date
+              </th>
+                <th>
+                  Student name
+                </th>
+                <th>
+                  billing to
+                </th>
+                <th>
+                  description
+                </th>
+                <th>
+                  Quantity
+                </th>
+                <th>
+                  price
+                </th>
+                <th>
+                  Total 
+                </th>
+                <th>
+                  Paid 
+                </th>
+
+                <th>
+                  Balance
+                </th>
+                 <th>
+                  Doc Status
+                 </th>
+                 <th>
+                 View
+                 </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for closedinvoice in closedinvoices %}
+            {% if closedinvoice.payment_status == "paid" %}
+            <tr>
+            
+              <td>
+                {{closedinvoice.invoice_number}}
+              </td>
+              <td>
+                {{closedinvoice.billing_date| date:"M d, Y"}}
+               </td>
+              <td>
+              <a href="{% url 'detaildocument' closedinvoice.document.id %}"> 
+                {{closedinvoice.document.student_name}}
+            
+              </a>  </td>
+              
+             
+              <td>
+                {{closedinvoice.billing_to|linebreaksbr|slice:":20"}}
+              </td>
+              <td>
+                {{closedinvoice.description}}
+              </td>
+              <td>
+                {{closedinvoice.quantity}}
+              </td>
+              <td>
+                {{closedinvoice.price}}
+              </td>
+              
+              <td>
+                {{closedinvoice.total}}
+              </td>
+              <td>
+                {{closedinvoice.paid}}
+              </td>
+              <td class="text-danger">
+                {{closedinvoice.balance}}
+              </td>
+              
+              
+             
+
+              
+                {% if closedinvoice.document.status == "open" %}
+                <td class="text-danger">
+                  <b>{{closedinvoice.document.status}}
+                {% elif closedinvoice.document.status == "processing" %}
+                <td class="text-warning">
+                 <b> {{closedinvoice.document.status}}
+                  {% else %}
+                <td class="text-success">
+                    <b> {{closedinvoice.document.status}}
+{% endif %}
+
+              </td>
+              <td>
+                <a href="{% url 'viewinvoice' closedinvoice.id %}" >   
+                <button type="submit" class="btn-sm btn-add"  >
+                                          
+                  <i class="ti-printer" style='font-size:18px;margin-left:1px' ></i>                         
+                    </button>
+                  </a>
+              </td>
+            </tr>
+            
+            {% endif %}
+          {% endfor %}
+          
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div
+  
+
+            
+        
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+   <!-- partial -->
+  </div>
+
+
+
+  {% endblock %}
+
+
+  

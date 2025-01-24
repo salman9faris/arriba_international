@@ -1,10 +1,10 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponseRedirect
 from dashboard.decorators import unauthencticated_user,admin_only,entry_staff,associate_staff
-from .form import adddocForm,TrackingForm,userprofileform
-from .models import Document,Trackingevent,Agency,Totalcount,Userprofile
+from .form import adddocForm,TrackingForm,userprofileform,Agencydetailsform
+from .models import Country, Document,Trackingevent,Agency,Totalcount,Userprofile,Invoicedetails
 import random,datetime,calendar,string
-from django.db.models import Count
+from django.db.models import Count,Q
 from django.contrib.auth.models import User,Group
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
@@ -13,7 +13,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import forms  
 from django.shortcuts import redirect, render  
 from django.contrib import messages  
-from .form import CustomUserCreationForm 
+from .form import CustomUserCreationForm ,Addinvoiceform
+import random
+from django.db.models import Sum
+from django.utils import timezone
+from django.http import HttpResponse
+
 
 
 
@@ -21,47 +26,87 @@ from .form import CustomUserCreationForm
 @login_required(login_url="loginuser")
 @entry_staff
 def dashboard(request):
-    agency=Agency.objects.all().order_by("-updated_date")
+    now = timezone.now()
+    agency=Agency.objects.all().order_by("-total_doc")[:5]
     total=Totalcount.objects.all()
-    country_count=Document.objects.values("submitting_for").order_by("submitting_for").annotate(count=Count("submitting_for"))
+    country=Country.objects.all().order_by("-total_doc")[:5]
+    agencycount=Agency.objects.count()
+    countrycount=Country.objects.count()
+    todaycount = Document.objects.filter(created_date=now.date()).count()
     context={
         "agencies":agency,
         "total_count":total,
-        "country_count":country_count
+        "country":country,
+        "countrycount":countrycount,
+        "agencycount":agencycount,
+        "todaycount":todaycount
+
     }
     return render(request,"index.html",context)
 
 @login_required(login_url="loginuser")
 @entry_staff
 def refreshdoc(request):
-    closeddoc=Document.objects.filter(status="closed").__len__()
-    openeddoc=Document.objects.filter(status="open").__len__()
-    processingdoc=Document.objects.filter(status="processing").__len__()
+    now = timezone.now()
+    status_counts = Document.objects.values('status') \
+    .annotate(count=Count('status')) \
+    .order_by('status')
     total_count=Totalcount.objects.get()
-    total_count.opened_doc=openeddoc
-    total_count.closed_doc=closeddoc
-    total_count.processing=processingdoc
-    total_count.total_doc=openeddoc+closeddoc+processingdoc
+    total_count.opened_doc=status_counts[1]['count']
+    total_count.closed_doc=status_counts[0]['count']
+    total_count.processing=status_counts[2]['count']
+    total_count.total_doc=status_counts[0]['count']+status_counts[1]['count']+status_counts[2]['count']
     total_count.save()
-    total=Totalcount.objects.all()
-    country_count=Document.objects.values("submitting_for").order_by("submitting_for").annotate(count=Count("submitting_for"))
-    agency_count=Document.objects.values("agency_name").order_by("agency_name").annotate(count=Count("status"))
-   
+    Agency.objects.all().update(total_doc=0,opened_doc=0)
+    
+    country_count= Document.objects.values('submitting_for') \
+    .annotate(open=Count('status', filter=Q(status='open')), processing=Count('status', filter=Q(status='processing')),
+              closed=Count('status', filter=Q(status='closed'))) \
+    .order_by('submitting_for')
+    agency_count= Document.objects.values('agency_name') \
+    .annotate(open=Count('status', filter=Q(status='open')), processing=Count('status', filter=Q(status='processing')),
+              closed=Count('status', filter=Q(status='closed'))) \
+    .order_by('agency_name')
     for agency_count in agency_count:
         try:
             agency=Agency.objects.get(agency_name=agency_count["agency_name"])
-            agency.total_doc=agency_count["count"]
+            agency.opened_doc= agency_count["open"]+agency_count["processing"]
+            agency.total_doc=agency_count["open"]+agency_count["processing"]+agency_count["closed"]
             agency.save()
-           
         except:
-            agency=Agency(agency_name=agency_count["agency_name"],total_doc=agency_count["count"])
-          
+            agency=Agency(agency_name=agency_count["agency_name"],
+                          opened_doc= agency_count["open"]+agency_count["processing"],
+                          total_doc=agency_count["open"]+agency_count["processing"]+agency_count["closed"])
             agency.save()
-    agencies=Agency.objects.all().order_by("-updated_date")
+    for country_count in country_count:
+        try:
+         
+            country=Country.objects.get(country=country_count["submitting_for"])
+            country.opened_doc= country_count["open"]+country_count["processing"]
+            country.total_doc=country_count["open"]+country_count["processing"]+country_count["closed"]
+            country.save()
+        except:
+            country=Country(
+                  country=country_count["submitting_for"],
+                  opened_doc= country_count["open"]+country_count["processing"],
+                  total_doc=country_count["open"]+country_count["processing"]+country_count["closed"]
+            )
+            country.save()
+    country=Country.objects.all().order_by("-total_doc")[:5]
+    agencies=Agency.objects.all().order_by("-total_doc")[:5]
+    total=Totalcount.objects.all()
+    agencycount=Agency.objects.count()
+    countrycount=Country.objects.count()
+    todaycount = Document.objects.filter(created_date=now.date()).count()
     context={
         "agencies":agencies,
         "total_count":total,
-        "country_count":country_count
+        "country":country,
+       
+        "agencycount":agencycount ,
+          "countrycount":countrycount,
+           "todaycount":todaycount
+
     }
     return render(request,"index.html",context)
 
@@ -125,9 +170,9 @@ def updatedocument(request,pk):
 @login_required(login_url="loginuser")
 @entry_staff
 def showdocument(request):
-    opendoc=Document.objects.filter(status="open").order_by('-created_date')
-    closeddoc=Document.objects.filter(status="closed").order_by('-created_date')
-    processingddoc=Document.objects.filter(status="processing").order_by('-created_date')
+    opendoc=Document.objects.filter(status="open").order_by('-created_date')[:10]
+    processingddoc=Document.objects.filter(status="processing").order_by('-created_date')[:5]
+    closeddoc=Document.objects.filter(status="closed").order_by('-created_date')[:5]
     context={
         "opendoc":opendoc,
         "closeddoc":closeddoc,
@@ -137,13 +182,67 @@ def showdocument(request):
 
 @login_required(login_url="loginuser")
 @entry_staff
+def showalldocument(request,pk):
+    if pk==0:
+        opendoc=Document.objects.filter(status="open").order_by('-created_date')
+        processingddoc=None
+        closeddoc=None
+    elif pk==1:
+        processingddoc=Document.objects.filter(status="processing").order_by('-created_date')
+        opendoc=None
+        closeddoc=None
+    else:
+        closeddoc=Document.objects.filter(status="closed").order_by('-created_date')
+        processingddoc=None
+        opendoc=None
+    context={
+        "opendoc":opendoc,
+        "closeddoc":closeddoc,
+        "processingddoc":processingddoc
+    }
+    return render(request,"show_document.html",context)
+
+
+
+
+def topagency(request):
+    agency=Agency.objects.all().order_by("-updated_date")
+    title="Agency"
+    context={
+        "agencies":agency,
+        "title":title
+       
+       
+    }
+    return render(request,"topdocument.html",context)
+
+
+def topcountry(request):
+    country=Country.objects.all().order_by("-total_doc")
+    title="Submitting for"
+    context={
+        "country":country,
+        "title":title
+       
+    }
+    return render(request,"topdocument.html",context)
+
+
+
+
+
+
+@login_required(login_url="loginuser")
+@entry_staff
 def detaildocument(request,pk):
     doc=Document.objects.get(id=pk)
+    invoice=Invoicedetails.objects.filter(document=doc).order_by('-billing_date')
     tracks=Trackingevent.objects.filter(document=doc).order_by('-date')
     context={
         "filter":"none",
         "doc":doc,
-        "tracks":tracks
+        "tracks":tracks,
+        "invoices":invoice
     }
     return render(request,"document_details.html",context)
 
@@ -151,9 +250,11 @@ def detaildocument(request,pk):
 @entry_staff
 def addevent(request,pk):
     value="tracking details"
+   
     if request.method=="POST":
         doc=Document.objects.get(id=pk)
         form=TrackingForm(request.POST)
+        
         if form.is_valid():
             trackevent=form.save(commit=False)
             trackevent.document=doc
@@ -162,17 +263,39 @@ def addevent(request,pk):
     form=TrackingForm
     context={
         'form':form,
-        "value":value,
-
-    }
+        "value":value,    }
     return render(request,"new_document.html",context)
+
+@login_required(login_url="loginuser")
+@entry_staff
+def addagencydetails(request,pk):
+    value="Agency details"
+    if request.method=="POST":
+        agnecy=get_object_or_404(Agency,id=pk)
+       
+        form=Agencydetailsform(request.POST)
+        form=Agencydetailsform(request.POST or None,instance=agnecy)
+       
+        if form.is_valid():
+            agencydetails=form.save(commit=False)
+           
+            agencydetails.save()
+            return redirect("docbyagency",pk=agnecy.agency_name)
+    form=Agencydetailsform
+    context={
+        'form':form,
+        "value":value,    }
+    return render(request,"new_document.html",context)
+
 
 
 @login_required(login_url="loginuser")
 @associate_staff
 def updatetrackevent(request,pk):
     value="update tracking details"
+
     event=get_object_or_404(Trackingevent,id=pk)
+   
     form=TrackingForm(request.POST or None,instance=event)
     id=event.document.id
     if form.is_valid():
@@ -194,7 +317,159 @@ def deletetrackevent(request,pk):
     except:
         return redirect("detaildocument",pk=id)
  
-  
+
+def addevent(request,pk):
+    value="tracking details"
+    if request.method=="POST":
+        doc=Document.objects.get(id=pk)
+        form=TrackingForm(request.POST)
+        if form.is_valid():
+            trackevent=form.save(commit=False)
+            trackevent.document=doc
+            trackevent.save()
+            return redirect("detaildocument",pk=pk)
+    form=TrackingForm
+    context={
+        'form':form,
+        "value":value,
+    }
+    return render(request,"new_document.html",context)
+
+@login_required(login_url="loginuser")
+@admin_only
+def showinvoice(request):
+    pendinginvoice=Invoicedetails.objects.all().order_by('-created_date')
+    closedinvoice=Invoicedetails.objects.all().order_by('-created_date')
+   
+   
+    context={
+       "paid":"N/A",
+       "balance":"N/A",
+       "total":"N/A",
+        "pendinginvoices":pendinginvoice,
+        "closedinvoices":closedinvoice
+    }
+    return render(request,"showallinvoice.html",context)
+
+
+
+@login_required(login_url="loginuser")
+@admin_only
+def viewinvoice(request,pk):
+    invoice=Invoicedetails.objects.get(id=pk)
+    doc=invoice.document.id
+    context={
+       "invoice":invoice,
+       "doc":doc
+    }
+    return render(request,"invoice.html",context)
+
+@login_required(login_url="loginuser")
+@admin_only
+def refreshinvoice(request):
+    pendinginvoice=Invoicedetails.objects.all().order_by('-created_date')
+    closedinvoice=Invoicedetails.objects.all().order_by('-created_date')
+    paid=Invoicedetails.objects.aggregate(Sum('paid'))
+    balance=Invoicedetails.objects.aggregate(Sum('balance'))
+    total=Invoicedetails.objects.aggregate(Sum('total'))
+    context={
+       "paid":paid['paid__sum'],
+       "balance":balance['balance__sum'],
+       "total":total['total__sum'],
+        "pendinginvoices":pendinginvoice,
+        "closedinvoices":closedinvoice
+    }
+    return render(request,"showinvoice.html",context)
+
+
+@login_required(login_url="loginuser")
+@associate_staff
+def addinvoice(request,pk):
+    value="Add Bills"
+    if request.method=="POST":
+        doc=Document.objects.get(id=pk)
+        form=Addinvoiceform(request.POST)
+      
+        if form.is_valid():
+            addinvoice=form.save(commit=False)
+            price=form.cleaned_data['price']
+            quanity=form.cleaned_data['quantity']
+            paid=form.cleaned_data['paid']
+            total=price*quanity
+            addinvoice.document=doc
+            random_number=random.randint(111211,992123)
+            unique=Invoicedetails.objects.filter(invoice_number=random_number)
+            while  len(unique)>0:
+                random_number=random.randint(111211,919321)
+                unique=Invoicedetails.objects.filter(invoice_number=random_number) 
+            addinvoice.invoice_number=random_number
+            print(f'pay status-----{form.cleaned_data['payment_status']}')
+            doc.pay_status=form.cleaned_data['payment_status']
+
+            doc.save()
+            addinvoice.total=total
+            addinvoice.balance=total-paid
+            addinvoice.save()
+            
+            return redirect("detaildocument",pk=pk)
+    form=Addinvoiceform
+    context={
+        'form':form,
+        "value":value,
+    }
+    return render(request,"new_document.html",context)
+
+
+
+@login_required(login_url="loginuser")
+@associate_staff
+def updateinvoice(request,pk):
+    value="update Invoice"
+   
+    event=get_object_or_404(Invoicedetails,id=pk)
+    
+    form=Addinvoiceform(request.POST or None,instance=event)
+    id=event.document.id
+    
+    if form.is_valid():
+            doc=Document.objects.get(id=id)
+            addinvoice=form.save(commit=False)
+            price=form.cleaned_data['price']
+            quanity=form.cleaned_data['quantity']
+            paid=form.cleaned_data['paid']
+            total=price*quanity
+            doc.pay_status=form.cleaned_data['payment_status']
+
+            doc.save()
+            addinvoice.total=total
+            addinvoice.balance=total-paid
+            addinvoice.save()
+            return redirect("detaildocument",pk=id)
+    context={
+        'form':form, "value":value,
+    }
+    return render(request,"new_document.html",context)
+
+@login_required(login_url="loginuser")
+@admin_only
+def deleteinvoice(request,pk):  
+    event=Invoicedetails.objects.get(id=pk)
+    doc=event.document.id
+    try:
+        event=Invoicedetails.objects.filter(id=pk)
+        
+        event.delete()
+        
+        return redirect("detaildocument",pk=doc)
+    except:
+        return redirect("detaildocument",pk=doc)
+    
+
+
+
+
+
+
 
 @login_required(login_url="loginuser")
 @entry_staff
@@ -202,6 +477,8 @@ def docbyagency(request,pk):
     opendoc=Document.objects.filter(status="open",agency_name=pk).order_by('-created_date')
     closeddoc=Document.objects.filter(status="closed",agency_name=pk).order_by('-created_date')
     processingddoc=Document.objects.filter(status="processing",agency_name=pk).order_by('-created_date')
+    agency=Agency.objects.get(agency_name=pk)
+    
     processing_count=processingddoc.count()
     opendoc_count=opendoc.count()
     totaldoc_count=opendoc_count+closeddoc.count()+processing_count
@@ -215,7 +492,8 @@ def docbyagency(request,pk):
         "totaldoc_count":totaldoc_count,
         "opendoc":opendoc,
         "closeddoc":closeddoc,
-        "processingddoc":processingddoc
+        "processingddoc":processingddoc,
+        "agency":agency
     }
     
     return render(request,"show_document.html",context)

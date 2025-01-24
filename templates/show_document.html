@@ -16,24 +16,34 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                          <h4 class="font-weight-bold mb-0">agency details</h4>
+                          <h4 class="font-weight-bold mb-0">{{filterby}} details</h4>
                         </div>
-                       
+                        {% if filterby == 'agency' %}
+                        <div>
+
+                          <form action="{% url 'addagencydetails' agency.id %}">
+                            <button type="submit" class="btn-sm btn-edt"  >
+                                          
+                              <i class="ti-pencil-alt" style='font-size:18px;margin-left:1px' ></i>                         
+                                </button>
+                              </form>
+                        </div>
+                        {% endif %}
                       </div>
                   <div class="info-grid">
                     {% if filterby == 'agency' %}
                     <div class="info-item">
-                        <p class="label">agency _name</p>
+                        <p class="label">agency name</p>
                         <p class="value">{{value}}</p>
                     </div>
                     <div class="info-item">
-                      <p class="label">mobile number</p>
-                      <p class="value">{{ncc}}</p>
+                      <p class="label">contact number</p>
+                      <p class="value">{{agency.Mobilenumber}}</p>
                   </div>
                   
                   <div class="info-item">
                       <p class="label">address</p>
-                      <p class="value"> {{doc.university}}</p>
+                      <p class="value"> {{agency.address}}</p>
                   </div>
                 
                   <div class="info-item">
@@ -48,10 +58,7 @@
                     <p class="label">processing doc</p>
                     <p class="value"> {{processin_count}}</p>
                 </div>
-                  <div class="info-item">
-                      <p class="label">comment</p>
-                      <p class="value">{{doc.comment}}</p>
-                  </div> 
+                 
                     {% endif %}
                     {% if filterby == 'country' %}
                     <div class="info-item">
@@ -83,6 +90,7 @@
 
 
 {% endif %}
+{% if opendoc is not none %}
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div>
@@ -90,6 +98,8 @@
                     <i class="ti-arrow-left"></i>
                    </button>
                 </div>
+
+
                 <div class="card-body"> 
                   <h4 class="card-title">Open Documents</h4>
                   <div class="table-responsive">
@@ -123,7 +133,7 @@
                           
                           
                            <th>
-                            Status
+                           Payment
                            </th>
                            
  
@@ -166,22 +176,38 @@
                             {{doc.created_date| date:"M d, Y"}}
                           </td>
                          
-                         
-                          <td class="text-danger">
-                            <b>
-                              {{doc.status}}
-                          </td>
+                          {% if doc.pay_status %}
+                          <td class="text-success">
+                            <b>Paid
+                       
+                            {% else %}
+                          <td class="text-warning">
+                              <b> Pending
+                              {% endif %}
+                              </td>
+
                           {% else %}              
                         </tr>
                         {% endif %}   
                         {% endfor %}
                       </tbody>
+                      
                     </table>
+                    <br>
+                    {% if opendoc|length < 6 %}
+                    <a href="{% url 'showalldocument' '0' %}">
+                      <button type="submit" class="btn-sm btn-del" >
+                                          
+                      </i> view all         
+                     </button>
+                    </a>
+                    {%endif %}
                   </div>
                 </div>
               </div>
             </div>
-
+            {% endif %}
+{% if processingddoc is not none %}
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
@@ -217,7 +243,7 @@
                           
                           
                            <th>
-                            Status
+                            payment
                            </th>
  
                         </tr>
@@ -251,10 +277,15 @@
                             {{doc.created_date| date:"M d, Y"}}
                           </td>
                           
+                          {% if doc.pay_status %}
+                          <td class="text-success">
+                            <b>Paid
+                       
+                            {% else %}
                           <td class="text-warning">
-                            <b>
-                              {{doc.status}}
-                          </td>
+                              <b> Pending
+                              {% endif %}
+                              </td>
 
                           <td>
                           
@@ -264,16 +295,25 @@
                         {% endfor %}
                       </tbody>
                     </table>
+                    <br>
+                    {% if opendoc|length < 6 %}
+                    <a href="{% url 'showalldocument' '1' %}">
+                      <button type="submit" class="btn-sm btn-del" >
+                                          
+                      </i> view all         
+                     </button>
+                    </a>
+                    {% endif %}
                   </div>
                 </div>
               </div>
             </div>
-
-
+            {% endif %}
+{% if closeddoc is not none %}
             <div class="col-lg-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Closed Document table</h4>
+                  <h4 class="card-title">Closed Document</h4>
                   <div class="table-responsive">
                     <table class="table table-striped">
                       <thead>
@@ -305,7 +345,7 @@
                           
                           
                            <th>
-                            Status
+                            payment
                            </th>
  
                         </tr>
@@ -339,10 +379,16 @@
                             {{doc.created_date| date:"M d, Y"}}
                           </td>
                           
+                          {% if doc.pay_status %}
                           <td class="text-success">
-                            <b>
-                              {{doc.status}}
-                          </td>
+                            <b>Paid
+                       
+                            {% else %}
+                          <td class="text-warning">
+                              <b> Pending
+                              {% endif %}
+                              </td>
+                              
 
                           <td>
                           
@@ -353,12 +399,23 @@
                       </tbody>
                     </table>
                   </div>
+                  <br>
+                
+                  {% if closeddoc|length < 6 %}
+                  <a href="{% url 'showalldocument' '2' %}">
+                    <button type="submit" class="btn-sm btn-del" >
+                                        
+                    </i> view all         
+                   </button>
+                  </a>
+                  {% endif %}
                 </div>
-              </div>
+                </div>
+                
             </div>
           </div>
           </div
-        
+        {% endif %}
         <!-- partial -->
       </div>
       <!-- main-panel ends -->

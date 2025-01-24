@@ -17,7 +17,79 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{% static 'images/arriba_single.png' %}" />
+  <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+  <style>
+    .custom-select {
+      background-color: #e9e9e9;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 5px;
+      width: 200px;
+  }
+  
+  #choice-field-id {
+      border: 2px solid #007BFF;
+  }
+  
+  select[data-info="choice-field"] {
+      color: #333;
+      border: 2px solid #4CAF50;
+  }
+  
+  
+    .btn-sm {
+      background-color: #04AA6D; /* Green */
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+    }
+
+    .btn-del {
+      background-color: white; 
+      color: black; 
+      border: .5px solid red;
+    }
+    
+    .btn-del:hover {
+      background-color: #FF5858;
+      color: white;
+      border: .5px solid white;
+    }
+
+    .btn-edt {
+      background-color: white;
+      color: black  ;
+      border: .5px solid blue;
+    }
+    
+    .btn-edt:hover {
+      background-color:#248AFD;
+      color: white;
+      border: .5px solid white;
+    }
+
+
+    .btn-add {
+      background-color: white;
+      color: black  ;
+      border: .5px solid rgb(59, 192, 29);
+    }
+    
+    .btn-add:hover {
+      background-color:#04AA6D;
+      color: white;
+      border: .5px solid white;
+    }
+  </style>
 </head>
+
 <body>
   <div class="container-scroller">
     
@@ -174,7 +246,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="">
+              <a class="nav-link" href="{% url 'showinvoice' %}">
                 <i class="ti-book menu-icon"></i>
                 <span class="menu-title">Invoice</span>
               </a>
@@ -219,6 +291,26 @@
 <!-- Custom js for this page-->
 <script src="{% static 'js/dashboard.js' %}"></script>
 <!-- End custom js for this page-->
+
+<script>
+    function myFunction() {
+      var x = document.getElementById("balance");
+      var y = document.getElementById("total");
+      var z = document.getElementById("paid");
+      
+      if (x.style.display === "none" ) {
+        x.style.display = "block";
+        y.style.display = "block";
+        z.style.display = "block";
+      } else {
+        x.style.display = "none";
+        y.style.display = "none";
+        z.style.display = "none";
+      
+      }
+      
+    }
+    </script>
 </body>
 
 </html>   

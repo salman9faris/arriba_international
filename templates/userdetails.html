@@ -74,10 +74,12 @@
                     <div>
                         {% if userdetails.role == 'admin' %}
                         <form action="{% url 'edituserprofile' employee_detail.id %}">
-                            <button type="submit" class="btn btn-outline-secondary btn-icon-text">
-                               Edit
-                                <i class="ti-file btn-icon-append"></i>                          
-                              </button>
+                            
+
+                              <button type="submit" class="btn-sm btn-edt" >
+                                        
+                                <i class="ti-pencil-alt"  ></i>                        
+                               </button>
                               
                             </form>
                             {% endif %}

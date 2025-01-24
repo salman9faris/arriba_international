@@ -3,8 +3,9 @@ from dashboard.models import Document, Trackingevent,Agency,Totalcount
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.db.models import Count
-from home.serializer import Documentserializer,Agencyserializer, Trackingserializer,Totalcountserializer
-
+from home.serializer import Documentserializer,Agencyserializer, Trackingserializer,Totalcountserializer,Userprofileserializer
+from dashboard.models import Userprofile
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -44,6 +45,17 @@ def alldocapi(request):
         docserializer=Documentserializer(alldoc,many=True)
      return Response(docserializer.data,)
 
+
+@api_view(['GET'])
+def userdetails(request,pk):
+     if request.method=='GET':
+        
+        user=Userprofile.objects.filter(id=pk)
+       
+        docserializer=Userprofileserializer(user,many=True)
+        
+     return Response(docserializer.data,)
+
 @api_view(['GET'])
 def testarriba(request):
      
@@ -63,7 +75,8 @@ def docapi(request,pk):
 @api_view(['GET'])
 def allagencyapi(request):
      if request.method=='GET':
-        alllagency=Agency.objects.all()
+        alllagency=Agency.objects.all().order_by('-created_date')
+
         serializer=Agencyserializer(alllagency,many=True)
      return Response(serializer.data)
 

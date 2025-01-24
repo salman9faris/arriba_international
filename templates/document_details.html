@@ -16,17 +16,18 @@
                     </div>
                     <div>
                         <form action="{% url 'updatedocument' doc.id %}">
-                            <button type="submit" class="btn btn-outline-secondary btn-icon-text">
-                               Edit
-                                <i class="ti-file btn-icon-append"></i>                          
+                          <button type="submit" class="btn-sm btn-edt"  >
+                                        
+                            <i class="ti-pencil-alt" style='font-size:18px;margin-left:1px' ></i>                         
                               </button>
                             </form>
                       </div>
                   </div>
               <div class="info-grid">
                 <div class="info-item">
+                  <td> <a href="{% url 'docbyagency' doc.agency_name %}" > 
                     <p class="label">agency name</p>
-                    <p class="value">{{doc.agency_name}}</p>
+                    <p >{{doc.agency_name}}</p></a>
                 </div>
                 <div class="info-item">
                     <p class="label">student namer</p>
@@ -58,9 +59,6 @@
                 </div> 
                 <div class="info-item">
                     <p class="label">status</p>
-                    
-                   
-                        
                         <button type="button" class="btn btn-outline-primary  dropdown-toggle" data-bs-toggle="dropdown">{{doc.status}}</button>
                         <div class="dropdown-menu" name="open">
                             <a href="{% url 'updateopen' doc.id %}" class="dropdown-item">Open</a>
@@ -72,6 +70,121 @@
             </div>
           </div>
         </div>
+
+        <div class="col-lg-12 grid-margin stretch-card">
+          <div class="card">
+            <div class="card-body">
+                <div class="col-md-12 grid-margin">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div>
+                        <h4 class="font-weight-bold mb-0">Invoices</h4>
+                      </div>
+                      <div>
+                        <form action="{% url 'addinvoice' doc.id %}">
+                          <button type="submit" class="btn-sm btn-add"  >
+                                        
+                            <i class="ti-plus" style='font-size:18px;margin-left:1px' ></i>                               
+                          </button>
+                        </form>
+                        <br>
+                      </div>
+                    </div>
+                    <div class="info-item">
+                            <div class="table-responsive">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th>
+                                    Sl no.
+                                    </th>
+                                    <th>
+                                      Invoice number
+                                    </th>
+                                    <th>
+                                      Billing to
+                                    </th>
+                                    <th>
+                                      description
+                                    </th>
+                                    <th>
+                                     Quantity
+                                    </th>
+                                    <th>
+                                      payment status
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                 {% for invoice in invoices %}
+                                  <tr>
+                                    <td>
+                                    {{forloop.counter}}
+                                    </td>
+                                    <td>
+                                      {{invoice.invoice_number}}
+                                     </td>
+                                    <td>
+                                     {{invoice.billing_to|linebreaksbr|slice:":10"}}
+                                    </td>
+                                    
+                                    <td>
+                                      {{invoice.description|linebreaksbr|slice:":30"}}
+                                    </td>
+                                    <td>
+                                      {{invoice.quantity}}
+                                    </td>
+                                    
+                                      
+
+                                      {% if invoice.payment_status == "pending" %}
+                            <td class="text-danger">
+                              <b>{{invoice.payment_status}}
+                            {% else %}
+                            <td class="text-success">
+                              <b>{{invoice.payment_status}}
+                              {% endif  %}
+                                    <td>
+                                      <a href="{% url 'viewinvoice' invoice.id %}" > 
+                                      <button type="submit" class="btn-sm btn-add" >
+                                        <i class="ti-printer" style='font-size:18px;margin-left:1px' ></i>      
+                                      </i>     
+                                     </button>
+                                    </a>
+                                     
+                                      <form action="{% url 'updateinvoice' invoice.id %}">
+                                        <button type="submit" class="btn-sm btn-edt" >
+                                        
+                                           <i class="ti-pencil-alt"  ></i>                          
+                                          </button>
+                                        </form>
+                                       
+                                      <form action="{% url 'deleteinvoice' invoice.id %}">
+                                        <button type="submit" class="btn-sm btn-del"  >
+                                       
+                                          <i class="ti-trash" style='font-size:18px;margin-left:1px' ></i>                          
+                                         </button>
+                                        </form>
+                                        <form action="{% url 'deleteinvoice' invoice.id %}">
+                                          </form>
+                                          <div>
+                                    </td>
+                                  </tr>
+                                {% endfor %}
+                                </tbody>
+                              </table>
+                       </div>
+                       </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
         <div class="col-lg-12 grid-margin stretch-card">
           <div class="card">
             <div class="card-body">
@@ -83,9 +196,9 @@
                       <div>
                         
                         <form action="{% url 'addevent' doc.id %}">
-                        <button type="submit" class="btn btn-outline-success btn-icon-text">
-                           Add
-                            <i class="ti-file btn-icon-append"></i>                          
+                          <button type="submit" class="btn-sm btn-add"  >
+                                        
+                            <i class="ti-plus" style='font-size:18px;margin-left:1px' ></i>                        
                           </button>
                         </form>
                         <br>
@@ -100,9 +213,9 @@
                       </div>
                       <div>
                         <form action="{% url 'updatetrackevent' track.id %}">
-                        <button type="submit" class="btn btn-outline-primary btn-icon-text ">
-                           Edit
-                            <i class="ti-file btn-icon-append"></i>                          
+                        <button type="submit" class="btn-sm btn-edt"  >
+                                        
+                          <i class="ti-pencil-alt" style='font-size:18px;margin-left:1px' ></i>                              
                           </button>
                         </form>
                       </div>
@@ -129,9 +242,8 @@
                         </div>
                         {% if tracks %}
                         <form action="{% url 'deletetrackevent' doc.id %}">
-                          <button type="submit" class="btn btn-outline-danger btn-icon-text">
-                             Delete
-                              <i class="ti-file btn-icon-append"></i>                          
+                          <button type="submit" class="btn-sm btn-del"  >
+                            <i class="ti-trash" style='font-size:18px;margin-left:1px' ></i>                             
                             </button>
                           </form>
                           {% endif %}

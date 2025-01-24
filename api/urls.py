@@ -11,6 +11,7 @@ urlpatterns = [
       path("allagency",views.allagencyapi,name='allagencyapi'),
       path("docbyagency/<pk>",views.docbyagencyapi,name='docbyagencyapi'),  
       path("trackdoc/<pk>",views.trackingapi,name='trackingapi'),  
-       path("totaldoc",views.totaldoccount,name='totaldoccount'),  
-       path("refresh",views.refresh,name='refresh'),  
+      path("totaldoc",views.totaldoccount,name='totaldoccount'),  
+      path("refresh",views.refresh,name='refresh'),  
+      path("user/<pk>",views.userdetails,name='userprofile'),  
 ]
